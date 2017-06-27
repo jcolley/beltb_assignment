@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Travel Buddy</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{message|safe}}</p>
+            {% endfor %}
+        {% endif %}
+        <div>
+            <a href="{% url 'auth:logout' %}">Logout</a>
+        </div>
+        <div>
+            <h1>Hello, {{user.name}}!</h1>
+        </div>
+        <h3>Your Trip Schedules</h3>
+        <table>
+            <tr>
+                <th>
+                    Destination
+                </th>
+                <th>
+                    Travel Start Date
+                </th>
+                <th>
+                    Travel End Date
+                </th>
+                <th>
+                    Plan
+                </th>
+            </tr>
+            {% for trip in trips %}
+                {% if user == trip.owner or user in trip.joined.all %}
+            <tr>
+                <td><a href="{% url 'tb:dest' trip_id=trip.id %}">{{trip.dest}}</a></td>
+                <td>{{trip.dFrom}}</td>
+                <td>{{trip.dTo}}</td>
+                <td>{{trip.desc}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        <hr>
+        <hr>
+        <table>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Destination
+                </th>
+                <th>
+                    Travel Start Date
+                </th>
+                <th>
+                    Travel End Date
+                </th>
+                <th>
+                    Do You Want to Join?
+                </th>
+            </tr>
+                {% for trip in trips %}
+                    {% if trip.owner.id != user.id and user not in trip.joined.all%}
+                <tr>
+                    <td>{{trip.owner.name}}</td>
+                    <td>{{trip.dest}}</td>
+                    <td>{{trip.dFrom}}</td>
+                    <td>{{trip.dTo}}</td>
+                    
+                    <td><a href="{% url 'tb:joinTrip' trip_id=trip.id user_id=user.id %}">Join</a></td>
+                </tr>
+                    {% endif %}
+                {% endfor %}
+        </table>
+        <a href="{% url 'tb:addPlan' %}">Add Travel Plan</a>
+    </body>
+</html>

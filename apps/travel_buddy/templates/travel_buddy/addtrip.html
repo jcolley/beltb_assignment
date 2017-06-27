@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Add Plan</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{message|safe}}</p>
+            {% endfor %}
+        {% endif %}
+        <div>
+            <a href="{% url 'tb:index' %}">Home</a>
+            <a href="{% url 'auth:logout' %}">Logout</a>
+        </div>
+        <h1>Add a Trip</h1>
+        <div>
+            <form action="{% url 'tb:addTrip' %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="dest" placeholder="Destination"><br>
+                <input type="text" name="desc" placeholder="Description"><br>
+                <input type="date" name="dFrom"><-- From Date<br>
+                <input type="date" name="dTo"><-- To Date<br>
+                <input type="hidden" name="owner" value="{{request.session.id}}">
+                <button type="submit" name="submit" value="submit">Add</button>
+            </form>
+        </div>
+    </body>
+</html>
